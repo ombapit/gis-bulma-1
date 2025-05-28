@@ -14,5 +14,5 @@ Template Fullscreen GIS dengan Tailwind CSS
  3. Develop dengan jalankan: 
  ```npx @tailwindcss/cli -i ./src/input.css -o ./assets/style.css --watch```
 
-## Live Preview
+## 🔴 Live Preview
 https://ombapit.github.io/gis-template-1

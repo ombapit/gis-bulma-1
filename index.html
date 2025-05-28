@@ -3,13 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link href="./assets/style.css" rel="stylesheet">
 </head>
-<body>
-  <div class="map-container">
-    <div id="map"></div>
+<body class="h-screen overflow-hidden">
+  <div class="h-full w-full flex">
+    <!-- Navbar Kiri -->
+    <aside class="mynav">
+      <div class="flex h-fit w-full justify-between">
+        <h1 class="text-xl font-bold">GIS</h1>
+        <div class="flex justify-end">
+          <a href="#home" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
+              <i class="fas fa-home"></i>
+            </a>
+            <a href="#user" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
+              <i class="fas fa-user"></i>
+            </a>
+            <a href="#settings" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
+              <i class="fas fa-cog"></i>
+            </a>
+        </div>
+      </div>
+      <div class="absolute top-0 right-[-40px] z-500">
+        <button class="p-2 bg-gray-800 text-white rounded-md cursor-pointer flex items-center justify-center text-xl rounded-md" id="bt_nav_side">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Konten Tengah -->
+    <main class="flex-1 overflow-hidden max-h-full">
+      <div id="map" class="w-full h-full"></div>
+    </main>
+
+    <!-- Navbar Kanan -->
+    <aside class="mynav-right">
+      <div class="card">
+        <div class="maximize">
+          <div class="flex w-full justify-between items-start">
+            <h2 class="text-xl font-bold mb-4">Sidebar Kanan</h2>
+            <button onclick="toggleCard(this)" data-mode="hide" class="cursor-pointer">
+              <i class="fas fa-minimize"></i>
+            </button>
+          </div>
+          <p>Contentnya</p>
+        </div>
+        <div class="minimize hidden">
+          <button onclick="toggleCard(this)" data-mode="show" class="cursor-pointer flex items-center p-3">
+            <i class="fas fa-info"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="maximize hidden">
+          <div class="flex w-full justify-between items-start">
+            <h2 class="text-xl font-bold mb-4">Sidebar Kanan 2</h2>
+            <button onclick="toggleCard(this)" data-mode="hide" class="cursor-pointer">
+              <i class="fas fa-minimize"></i>
+            </button>
+          </div>
+          <p>Contentnya</p>
+        </div>
+        <div class="minimize">
+          <button onclick="toggleCard(this)" data-mode="show" class="cursor-pointer flex items-center p-3">
+            <i class="fas fa-warning"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <!-- Leaflet JS -->
@@ -24,6 +89,34 @@
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(map);
+
+      const btNavSide = document.getElementById("bt_nav_side")
+      const myNav = document.querySelector(".mynav")
+      const icon = btNavSide.querySelector("i");
+
+      btNavSide.addEventListener("click", () => {
+        myNav.classList.toggle("close");
+
+        // Toggle arah ikon
+        if (icon.classList.contains("fa-arrow-left")) {
+          icon.classList.replace("fa-arrow-left", "fa-arrow-right");
+        } else {
+          icon.classList.replace("fa-arrow-right", "fa-arrow-left");
+        }
+      })
+
+      // show/hide card
+      function toggleCard(btn) {
+        const mode = btn.dataset.mode; // "hide" atau "show"
+        const cardEl = btn.closest(".card");
+        const maximizeEl = cardEl.querySelector(".maximize");
+        const minimizeEl = cardEl.querySelector(".minimize");
+
+        const isHiding = mode === "hide";
+
+        maximizeEl.classList.toggle("hidden", isHiding);
+        minimizeEl.classList.toggle("hidden", !isHiding);
+      }
     </script>
 </body>
 </html>
