@@ -1,9 +1,5 @@
-# gis-template-1
+# Gis Template 1
 Template Fullscreen GIS dengan Tailwind CSS
-
-# Instalasi Tailwind CSS dengan Tailwind CLI
-
-Panduan ini menjelaskan cara cepat menginstal dan menggunakan Tailwind CSS menggunakan **Tailwind CLI**, tanpa perlu konfigurasi build tools seperti Webpack, Vite, atau PostCSS.
 
 ## 📦 Prasyarat
 
@@ -12,10 +8,10 @@ Panduan ini menjelaskan cara cepat menginstal dan menggunakan Tailwind CSS mengg
 
 ## 🚀 Langkah Instalasi
 
- 1. Install Script
- ```- npm install```
- 2. Edit file ./src/input.css
- 3. Develop dengan jalankan compile: 
+ 1. Install Script: 
+ ```npm install```
+ 2. Edit file ./src/input.css untuk menambah css baru
+ 3. Develop dengan jalankan: 
  ```npx @tailwindcss/cli -i ./src/input.css -o ./assets/style.css --watch```
 
 ## Live Preview
