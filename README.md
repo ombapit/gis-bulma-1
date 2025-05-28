@@ -17,3 +17,6 @@ Panduan ini menjelaskan cara cepat menginstal dan menggunakan Tailwind CSS mengg
  2. Edit file ./src/input.css
  3. Develop dengan jalankan compile: 
  ```npx @tailwindcss/cli -i ./src/input.css -o ./assets/style.css --watch```
+
+## Live Preview
+https://ombapit.github.io/gis-template-1
