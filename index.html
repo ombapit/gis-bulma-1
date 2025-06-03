@@ -13,24 +13,53 @@
   <div class="h-full w-full flex">
     <!-- Navbar Kiri -->
     <aside class="mynav">
-      <div class="flex h-fit w-full justify-between">
-        <h1 class="text-xl font-bold">GIS</h1>
-        <div class="flex justify-end">
-          <a href="#home" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
-              <i class="fas fa-home"></i>
-            </a>
-            <a href="#user" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
-              <i class="fas fa-user"></i>
-            </a>
-            <a href="#settings" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
-              <i class="fas fa-cog"></i>
-            </a>
+      <div class="w-full">
+        <div class="flex w-full justify-between">
+          <h1 class="text-xl font-bold">GIS</h1>
+          <div class="flex justify-end">
+            <a href="#home" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
+                <i class="fas fa-home"></i>
+              </a>
+              <a href="#user" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
+                <i class="fas fa-user"></i>
+              </a>
+              <a href="#settings" class="ml-2 text-gray-400 no-underline hover:text-white transition-colors duration-200">
+                <i class="fas fa-cog"></i>
+              </a>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div id="tabs" class="flex flex-wrap navmenu">
+            <button class="tab-button active" data-tab="home"><i class="fas fa-home"></i></button>
+            <button class="tab-button hover:text-white" data-tab="globe">
+              <i class="fas fa-globe"></i>
+            </button>
+          </div>
+
+          <div id="tab-content">
+            <div class="tab-panel py-4" data-content="home">
+              <p>Ini adalah konten tab "Beranda".</p>
+            </div>
+            <div class="tab-panel py-4 hidden" data-content="globe">
+              <p>Ini adalah konten tab "Globe".</p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="absolute top-0 right-[-40px] z-500">
         <button class="p-2 bg-gray-800 text-white rounded-md cursor-pointer flex items-center justify-center text-xl rounded-md" id="bt_nav_side">
           <i class="fas fa-arrow-left"></i>
         </button>
+      </div>
+
+      <div class="absolute top-0 right-[-250px] z-500">
+        <select id="filter_upt" class="bg-zinc-800 text-white border border-zinc-600 rounded px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">--- Wilayah UPT ---</option>
+          <option value="dkj">Daerah Khusus Jakarta</option>
+          <option value="jabar">Jawa Barat</option>
+          <option value="jateng">Jawa Tengah</option>
+        </select>
       </div>
     </aside>
 
@@ -44,12 +73,12 @@
       <div class="card">
         <div class="maximize">
           <div class="flex w-full justify-between items-start">
-            <h2 class="text-xl font-bold mb-4">Sidebar Kanan</h2>
+            <h2 class="text-xl font-bold mb-4">Dashboard Signature</h2>
             <button onclick="toggleCard(this)" data-mode="hide" class="cursor-pointer">
               <i class="fas fa-minimize"></i>
             </button>
           </div>
-          <p>Contentnya</p>
+          <p>BMKG menghadirkan Impact Based Forecast (IBF) dan Nowcasting untuk peringatan dini cuaca yang lebih akurat, cepat, dan berbasis dampak. Sistem ini mendukung pengurangan risiko bencana hidrometeorologi dan meningkatkan kesiapsiagaan terhadap cuaca ekstrem.</p>
         </div>
         <div class="minimize hidden">
           <button onclick="toggleCard(this)" data-mode="show" class="cursor-pointer flex items-center p-3">
@@ -78,45 +107,171 @@
   </div>
 
   <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-      // Inisialisasi peta di tengah Indonesia
-      const map = L.map('map', {
-        zoomControl: false
-      }).setView([-2.5, 118], 5); // Koordinat Indonesia
-  
-      // Tambahkan tile map dari OpenStreetMap
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-      const btNavSide = document.getElementById("bt_nav_side")
-      const myNav = document.querySelector(".mynav")
-      const icon = btNavSide.querySelector("i");
+  <!-- ESRI Leaflet -->
+  <script src="https://unpkg.com/esri-leaflet@3.0.16/dist/esri-leaflet.js"></script>
 
-      btNavSide.addEventListener("click", () => {
-        myNav.classList.toggle("close");
-
-        // Toggle arah ikon
-        if (icon.classList.contains("fa-arrow-left")) {
-          icon.classList.replace("fa-arrow-left", "fa-arrow-right");
-        } else {
-          icon.classList.replace("fa-arrow-right", "fa-arrow-left");
-        }
-      })
-
-      // show/hide card
-      function toggleCard(btn) {
-        const mode = btn.dataset.mode; // "hide" atau "show"
-        const cardEl = btn.closest(".card");
-        const maximizeEl = cardEl.querySelector(".maximize");
-        const minimizeEl = cardEl.querySelector(".minimize");
-
-        const isHiding = mode === "hide";
-
-        maximizeEl.classList.toggle("hidden", isHiding);
-        minimizeEl.classList.toggle("hidden", !isHiding);
+  <script>
+    function getRandomColor() {
+      // Menghasilkan warna hex random, misal: #a1b2c3
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
       }
-    </script>
+      return color;
+    }
+
+    // Inisialisasi peta di tengah Indonesia
+    const map = L.map('map', {
+      zoomControl: false
+    }).setView([-2.5, 118], 5); // Koordinat Indonesia
+
+    // Tambahkan basemap dari Esri
+    L.esri.basemapLayer('Topographic').addTo(map);
+
+    // Tambahkan marker dengan popup
+    // const marker = L.marker([-6.2, 106.8]).addTo(map);
+    // marker.bindPopup("<b>Halo!</b><br>Ini Jakarta.").openPopup();
+
+    const selUpt = document.getElementById("filter_upt");
+    let currentLayer = null; // Simpan referensi layer yang sedang aktif
+
+    selUpt.addEventListener("change", (ev) => {
+      const upt = ev.target.value;
+
+      // Hapus layer sebelumnya jika ada
+      if (currentLayer) {
+        map.removeLayer(currentLayer);
+        currentLayer = null;
+      }
+
+      if (upt === "") {
+        // Zoom ke Indonesia
+        map.setView([-2.5, 118], 5);
+
+      } else if (upt === "dkj") {
+        map.setView([-6.2, 106.8], 11);
+
+        currentLayer = L.esri.featureLayer({
+          url: 'https://services-ap1.arcgis.com/zddIc5NlxDyZbzsT/ArcGIS/rest/services/RS_3D_DKI_Jakarta_WFL1/FeatureServer/1',
+          style: (feature) => {
+            let color = getRandomColor();
+            return {
+              color: color,  // Garis pinggir warna random
+              weight: 2,
+              fillOpacity: 0.4,
+              fillColor: color  // Warna isi random
+            };
+          },
+          onEachFeature: (feature, layer) => {
+            if (feature.properties?.Kabupaten) {
+              layer.bindPopup("Kabupaten/Kota: " + feature.properties.Kabupaten);
+            }
+          }
+        }).addTo(map);
+
+      } else if (upt === "jabar") {
+        map.setView([-6.9, 107.6], 9);
+
+        currentLayer = L.esri.featureLayer({
+          url: 'https://arcgis.jabarprov.go.id/arcgis/rest/services/peta_dasar/BATAS_WILAYAH_ADMINISTRASI_JAWA_BARAT_2023/FeatureServer/1',
+          style: (feature) => {
+            let color = getRandomColor();
+            return {
+              color: color,  // Garis pinggir warna random
+              weight: 2,
+              fillOpacity: 0.4,
+              fillColor: color  // Warna isi random
+            };
+          },
+          onEachFeature: (feature, layer) => {
+            if (feature.properties?.wadmkk) {
+              layer.bindPopup("Kabupaten/Kota: " + feature.properties.wadmkk);
+            }
+          }
+        }).addTo(map);
+
+      } else if (upt === "jateng") {
+        map.setView([-7.2, 110.2], 8);
+
+        currentLayer = L.esri.featureLayer({
+          // url: 'https://geoportal.bps.go.id/server/rest/services/kemiskinan_anak/rank_estimasi_provinsi/MapServer/2',
+          url: 'https://geoservices.big.go.id/rbi/rest/services/BATASWILAYAH/Administrasi_AR_KabKota_50K/MapServer/0',
+          where: "WADMPR = 'Jawa Tengah'", // Filter untuk Jawa Tengah
+          style: (feature) => {
+            let color = getRandomColor();
+            return {
+              color: color,  // Garis pinggir warna random
+              weight: 2,
+              fillOpacity: 0.4,
+              fillColor: color  // Warna isi random
+            };
+          },
+          onEachFeature: (feature, layer) => {
+            if (feature.properties?.WADMKK) {
+              layer.bindPopup("Kabupaten/Kota: " + feature.properties.WADMKK);
+            }
+          }
+        }).addTo(map);
+      }
+    });
+
+    const btNavSide = document.getElementById("bt_nav_side")
+    const myNav = document.querySelector(".mynav")
+    const icon = btNavSide.querySelector("i");
+
+    btNavSide.addEventListener("click", () => {
+      myNav.classList.toggle("close");
+
+      // Toggle arah ikon
+      if (icon.classList.contains("fa-arrow-left")) {
+        icon.classList.replace("fa-arrow-left", "fa-arrow-right");
+      } else {
+        icon.classList.replace("fa-arrow-right", "fa-arrow-left");
+      }
+    })
+
+    // show/hide card
+    function toggleCard(btn) {
+      const mode = btn.dataset.mode; // "hide" atau "show"
+      const cardEl = btn.closest(".card");
+      const maximizeEl = cardEl.querySelector(".maximize");
+      const minimizeEl = cardEl.querySelector(".minimize");
+
+      const isHiding = mode === "hide";
+
+      maximizeEl.classList.toggle("hidden", isHiding);
+      minimizeEl.classList.toggle("hidden", !isHiding);
+    }
+
+    // navtabs
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        // Reset semua tombol
+        tabButtons.forEach((btn) => {
+          btn.classList.remove('active', 'text-white');
+        });
+        
+        // Set tombol aktif
+        button.classList.add('text-white', 'active');
+        button.classList.remove('text-gray-300');
+
+        // Tampilkan panel sesuai tombol
+        const target = button.getAttribute('data-tab');
+        tabPanels.forEach((panel) => {
+          if (panel.getAttribute('data-content') === target) {
+            panel.classList.remove('hidden');
+          } else {
+            panel.classList.add('hidden');
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>

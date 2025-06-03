@@ -28,4 +28,14 @@
   .hidden {
     display: none !important;
   }
+
+  .navmenu button {
+    @apply p-2 cursor-pointer;
+  }
+  .navmenu button {
+    @apply text-gray-300;
+  }
+  .navmenu button.active {
+    @apply border-b-2 text-white;
+  }
 }
