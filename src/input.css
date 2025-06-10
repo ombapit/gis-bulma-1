@@ -18,11 +18,11 @@
   }
 
   .maximize {
-    @apply w-80;
+    @apply w-100;
   }
 
   .minimize {
-    @apply w-6 h-6 flex justify-center;
+    @apply w-4 h-4 flex justify-center;
   }
 
   .hidden {
