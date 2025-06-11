@@ -22,6 +22,7 @@ L.esri.basemapLayer('Streets').addTo(map);
 
 const selUpt = document.getElementById("filter_upt");
 let currentLayer = null; // Simpan referensi layer yang sedang aktif
+let siagaLayer = null; // Simpan referensi layer yang sedang aktif
 
 selUpt.addEventListener("change", (ev) => {
   const upt = ev.target.value;
@@ -30,6 +31,11 @@ selUpt.addEventListener("change", (ev) => {
   if (currentLayer) {
     map.removeLayer(currentLayer);
     currentLayer = null;
+  }
+
+  if (siagaLayer) {
+    map.removeLayer(siagaLayer);
+    siagaLayer = null;
   }
 
   if (upt === "") {
@@ -71,6 +77,28 @@ selUpt.addEventListener("change", (ev) => {
           weight: 2,
           fillOpacity: 0,
           // fillColor: color  // Warna isi random
+        };
+      },
+      onEachFeature: (feature, layer) => {
+        if (feature.properties?.wadmkk) {
+          layer.bindPopup("Kabupaten/Kota: " + feature.properties.wadmkk);
+        }
+      }
+    }).addTo(map);
+
+    // layer warna orange pada kab.bogor
+    siagaLayer = L.esri.featureLayer({
+      url: 'https://arcgis.jabarprov.go.id/arcgis/rest/services/peta_dasar/BATAS_WILAYAH_ADMINISTRASI_JAWA_BARAT_2023/FeatureServer/1',
+      where: "wadmkk='Bogor'", // Filter untuk Jawa Tengah
+      simplifyFactor: 0.1, // Nilai antara 0 (tidak disederhanakan) sampai 1 (sangat sederhana)
+      precision: 7,        // Pengaturan presisi koordinat (semakin rendah = semakin ringan)
+      style: (feature) => {
+        let color = '#FB8D00';
+        return {
+          color: '#000',  // Garis pinggir warna random
+          weight: 1,
+          fillOpacity: 0.8,
+          fillColor: color  // Warna isi random
         };
       },
       onEachFeature: (feature, layer) => {
@@ -135,29 +163,61 @@ function toggleCard(btn) {
   minimizeEl.classList.toggle("hidden", !isHiding);
 }
 
-// navtabs
-const tabButtons = document.querySelectorAll('.tab-button');
-const tabPanels = document.querySelectorAll('.tab-panel');
+function initTabs(tabButtonSelector, tabPanelSelector) {
+  const tabButtons = document.querySelectorAll(tabButtonSelector);
+  const tabPanels = document.querySelectorAll(tabPanelSelector);
 
-tabButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    // Reset semua tombol
-    tabButtons.forEach((btn) => {
-      btn.classList.remove('active', 'text-white');
-    });
-    
-    // Set tombol aktif
-    button.classList.add('text-white', 'active');
-    button.classList.remove('text-gray-300');
+  tabButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      // Reset semua tombol
+      tabButtons.forEach((btn) => {
+        btn.classList.remove('active', 'text-white');
+      });
 
-    // Tampilkan panel sesuai tombol
-    const target = button.getAttribute('data-tab');
-    tabPanels.forEach((panel) => {
-      if (panel.getAttribute('data-content') === target) {
-        panel.classList.remove('hidden');
-      } else {
-        panel.classList.add('hidden');
-      }
+      // Set tombol aktif
+      button.classList.add('text-white', 'active');
+      button.classList.remove('text-gray-300');
+
+      // Tampilkan panel sesuai tombol
+      const target = button.getAttribute('data-tab');
+      tabPanels.forEach((panel) => {
+        if (panel.getAttribute('data-content') === target) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      });
     });
   });
+}
+// ✅ Inisialisasi untuk nav tab
+initTabs('.tab-button', '.tab-panel');
+
+// ✅ Inisialisasi untuk bottabs card
+initTabs('.bot-card1-tab-button', '.bot-card1-tab-panel');
+initTabs('.bot-card2-tab-button', '.bot-card2-tab-panel');
+initTabs('.bot-card3-tab-button', '.bot-card3-tab-panel');
+
+const toggleBtn = document.getElementById('toggleBtn');
+const chevronPath = document.getElementById('chevronPath');
+const bottomContent = document.getElementById('bottom-content');
+let isOpen = true;
+
+toggleBtn.addEventListener('click', () => {
+  isOpen = !isOpen;
+
+  // Ganti d path SVG untuk toggle chevron up/down
+  if (isOpen) {
+    chevronPath.setAttribute('d', 'M19 9l-7 7-7-7'); // chevron-down   
+    bottomContent.classList.add('translate-y-[-300px]');
+  } else {
+    chevronPath.setAttribute('d', 'M5 15l7-7 7 7'); // chevron-up 
+    bottomContent.classList.remove('translate-y-[-300px]');    
+  }
+
+  // Toggle tampilan konten
+  // content.classList.toggle('opacity-0');
+  // content.classList.toggle('scale-95');
+  // content.classList.toggle('opacity-100');
+  // content.classList.toggle('scale-100');
 });

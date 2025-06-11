@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  button {
+    @apply cursor-pointer;
+  }
+}
+
 @layer components {
   .mynav {
     @apply absolute top-1 left-1 h-[calc(100%-0.5rem)] w-80 bg-gray-800 text-white p-4 z-[500] rounded-md flex transition-transform duration-400;
@@ -15,6 +21,10 @@
 
   .card {
     @apply bg-gray-800 text-white p-2 rounded-md m-2 flex w-fit justify-self-end;
+  }
+
+  .card-bottom {
+    @apply bg-black/70 text-white p-2 rounded-md m-2 block w-96 h-60 justify-center;
   }
 
   .maximize {

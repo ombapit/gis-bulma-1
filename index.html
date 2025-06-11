@@ -198,6 +198,79 @@
         </div>
       </div>
     </aside>
+
+    <!-- btn bottom -->
+    <aside class="absolute bottom-0 z-500 w-full">
+      <div class="flex justify-center">
+        <!-- Tombol Chevron -->
+        <button id="toggleBtn" class="p-2 rounded bg-gray-700 hover:bg-black transition">
+          <!-- Chevron Icon -->
+          <svg id="chevronIcon" class="w-6 h-6 text-white transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path id="chevronPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <aside class="absolute bottom-[-260px] translate-y-[-300px] z-500 w-full transition-transform duration-300 ease-in-out" id="bottom-content">
+      <div class="flex justify-center">
+        <div class="card-bottom">
+          <h2 class="text-xl font-bold mb-4">Data Pengamatan</h2>
+
+          <div class="flex flex-wrap navmenu">
+            <button class="bot-card1-tab-button active" data-tab="curah-hujan">Curah Hujan</button>
+            <button class="bot-card1-tab-button hover:text-white" data-tab="tinggi-muka-air">Tinggi Muka Air</button>
+          </div>
+          <div>
+            <div class="bot-card1-tab-panel py-4" data-content="curah-hujan">
+              <p>Ini adalah konten tab "Curah Hujan".</p>
+            </div>
+            <div class="bot-card1-tab-panel py-4 hidden" data-content="tinggi-muka-air">
+              <p>Ini adalah konten tab "Tinggi Muka Air".</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-bottom">
+          <h2 class="text-xl font-bold mb-4">Wilayah Terdampak</h2>
+
+          <div class="flex flex-wrap navmenu">
+            <button class="bot-card2-tab-button active" data-tab="kecamatan">Kecamatan</button>
+            <button class="bot-card2-tab-button hover:text-white" data-tab="kelurahan">Kelurahan</button>
+          </div>
+          <div>
+            <div class="bot-card2-tab-panel py-4" data-content="kecamatan">
+              <p>Ini adalah konten tab "Kecamatan".</p>
+            </div>
+            <div class="bot-card2-tab-panel py-4 hidden" data-content="kelurahan">
+              <p>Ini adalah konten tab "Kelurahan".</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-bottom">
+          <h2 class="text-xl font-bold mb-4">Informasi Dampak dan Respon</h2>
+
+          <div class="flex flex-wrap navmenu">
+            <button class="bot-card3-tab-button active" data-tab="dampak">Dampak</button>
+            <button class="bot-card3-tab-button hover:text-white" data-tab="respon">Respon</button>
+          </div>
+          <div>
+            <div class="bot-card3-tab-panel py-4" data-content="dampak">
+              <p>Ini adalah konten tab "Dampak".</p>
+            </div>
+            <div class="bot-card3-tab-panel py-4 hidden" data-content="respon">
+              <p>Ini adalah konten tab "Respon".</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-bottom flex flex-col p-0">
+          <div class="bg-amber-600 h-full text-center">
+            <h2 class="text-xl font-bold mb-4">Level</h2>
+            <span class="text-9xl font-bold">4</span>
+          </div>
+          <div class="h-fit text-center p-2 bg-amber-500">SIAGA</div>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <!-- Leaflet JS -->
